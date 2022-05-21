@@ -1,6 +1,17 @@
 import React from "react";
 import { Prices, Controls, Builder } from '../../components';
 import './Burger.css';
+import Modal from 'react-modal';
+const customStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+    },
+};
 
 
 class Burger extends React.Component {
@@ -13,11 +24,22 @@ class Burger extends React.Component {
             meat: 0,
             cheese: 0,
             pickle: 0,
-            totalPrice: 1
+            totalPrice: 1,
+            isModalOpen: false,
         }
     }
 
     findIngredientPrice = (ingredient) => this.props.ingredients.find(element => element.name === ingredient).price
+
+
+    onShowHideModal = () => {
+        this.setState((prevState) => {
+            return {
+                ...prevState,
+                isModalOpen: !prevState.isModalOpen
+            }
+        });
+    }
 
     onHandleIngredientQuantity = (e) => {
         e.preventDefault();
@@ -61,6 +83,7 @@ class Burger extends React.Component {
     }
     addInBurger = () => {
         let burger = [];
+
         for (let i = 0; i < this.state.meat; i++) {
             burger.push(<p key={burger} className='meat'></p>)
         }
@@ -84,11 +107,26 @@ class Burger extends React.Component {
 
 
     render() {
+
         return (
             <main className="main">
                 <Prices ingredients={this.props.ingredients} />
-                <Builder totalPrice={this.state.totalPrice} addInBurger={this.addInBurger} />
+                <Builder totalPrice={this.state.totalPrice} addInBurger={this.addInBurger} modalControl={this.onShowHideModal} />
                 <Controls onHandleIngredientQuantity={this.onHandleIngredientQuantity} ingredients={this.props.ingredients} order={this.state} />
+                <Modal
+                    style={customStyles}
+                    isOpen={this.state.isModalOpen}
+                    onRequestClose={this.onShowHideModal}
+                >
+                    <h2>Your order</h2>
+                    <button onClick={this.onShowHideModal}>close</button>
+                    {/* {this.state.map((elem) => { // check filter and map
+                        if (elem.quantity > 0) {
+                            return (<p>{elem.ingredient}: {elem.quantity}</p>);
+                        }
+                        return undefined;
+                    })} */}
+                </Modal>
             </main>
         )
     }

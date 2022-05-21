@@ -7,7 +7,7 @@ const Builder = (props) => (
             <h2>
                 Burger price: {props.totalPrice.toFixed(2)} ₴
             </h2>
-            <button className="btn_checkout" disabled={props.totalPrice.toFixed(2) <= 1 ? true : false}>Checkout</button>
+            <button className="btn_checkout" disabled={props.totalPrice.toFixed(2) <= 1 ? true : false} onClick={props.modalControl}>Checkout</button>
             <div className='burger_image'>
                 <img src={require(`../../images/up-burger.png`)} alt='burger-up' width='400' height='165' />
                 {props.totalPrice <= 1 && (<p>Start by adding ingredents to your burger</p>)}
